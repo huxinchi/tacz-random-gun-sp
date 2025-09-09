@@ -10,6 +10,8 @@ pls:list=list()
 spdatapack=True
 #(只在生成数据包时启用)数据包生成的位置
 sppath=""
+#(只在生成数据包时启用)mc的版本(x.x.x如1.20.1)
+mcver=""
 #额外执行的命令(当前目录下的addcommands.mcfunction,在发放后执行)
 addconnamds=False
 #重要配置，tacz文件的位置，用来读取枪包
@@ -390,16 +392,91 @@ with open("start.mcfunction","w",encoding="utf-8")as f:
         else:
             print("额外命令文件不存在")
 if spdatapack is True:
-    if not os.path.exists(os.path.join(sppath,"datapack","data","game","functions")):
+    vers=mcver.split(".",2)
+    #提取出每一位版本号
+    vers=[int(i) for i in vers]
+    #转换为int
+    can_rename_pack_format=False
+    if vers[1]>=21:
+        funcfilename="function"
+    else:
+        funcfilename="functions"
+    #如果版本大于1.21就把functions改名变成functions(ojang的改名)
+    if vers[1]==13 or vers[1]==14:
+        #1.13-1.14.4,13and14,4
+        pack_format=4
+    elif vers[1]==15 or (vers[1]==16 and vers[2]<=1):
+        #1.15-1.16.1,15 and 16<=1,5
+        pack_format=5
+    elif vers[1]==16 and vers[2]>=2:
+        #1.16.2-1.16.5,16 and >=2,6
+        pack_format=6
+    elif vers[1]==17:
+        #1.17-1.17.1,17,7
+        pack_format=7
+    elif vers[1]==18 and vers[2]<=1:
+        #1.18-1.18.1,18 and <=1,8
+        pack_format=8
+    elif vers[1]==18 and vers[2]==2:
+        #1.18.2,18 and 2,9
+        pack_format=9
+    elif vers[1]==19 and vers[2]<=3:
+        #1.19-1.19.3,19 and <=3,10
+        pack_format=10
+    elif vers[1]==19 and vers[2]==4:
+        #1.19.4,19 and ==4,12
+        pack_format=12
+    elif vers[1]==20 and vers[2]<=1:
+        #1.20-1.20.1,20 and <=1,15
+        pack_format=15
+    elif vers[1]==20 and vers[2]==2:
+        #1.20.2,20 and 2,18
+        pack_format=18
+    elif vers[1]==20 and (vers[2]==3 or vers[2]==4):
+        #1.20.3-1.20.4,20 and (3 or 4),26
+        pack_format=26
+    elif vers[1]==20 and vers[2]>=5:
+        #1.20.5-1.20.6,20 and >=5,41
+        pack_format=41
+    elif vers[1]==21 and vers[2]<=1:
+        #1.21-1.21.1,21 and <=1,48
+        pack_format=48
+    elif vers[1]==21 and (vers[2]==2 or vers[2]==3):
+        #1.21.2-1.21.3,21 and (2 or 3),57
+        pack_format=57
+    elif vers[1]==21 and vers[2]==4:
+        #1.21.4,21 and 4,61
+        pack_format=61
+    elif vers[1]==21 and vers[2]==5:
+        #1.21.5,21 and 5,71
+        pack_format=71
+    elif vers[1]==21 and vers[2]==6:
+        #1.21.6,21 and 6,80
+        pack_format=80
+    elif vers[1]==21 and (vers[2]==7 or vers[2]==7):
+        #1.21.7-1.21.8,21 and (7 or 8),81
+        pack_format=81
+    elif vers[1]>=21 and vers[2]>=9:
+        #1.21.9+ ojang的改名之min_format,max_format
+        can_rename_pack_format=True
+    else:
+        print("不支持的版本号，这个版本不存在或者是非正常版本(如4.1特殊版本)")
+
+
+    if not os.path.exists(os.path.join(sppath,"datapack","data","game",funcfilename)):
         print("检测到你开启了数据包生成模式\n生成数据包\n正在创建数据包文件夹")
-        os.makedirs(os.path.join(sppath,"datapack","data","game","functions"))
+        os.makedirs(os.path.join(sppath,"datapack","data","game",funcfilename))
         print("写入包元数据")
         with open(os.path.join(sppath,"datapack","pack.mcmeta"),"w",encoding="utf-8")as f:
-            f.write("{\"pack\":{\"pack_format\":15,\"description\":\"a randompack\"}}")
+            if can_rename_pack_format is True:
+                #因为ojang的改名，最低只可以到48(1.21)但pack_format必须在min_format和max_format指定的范围内,但又其实因为低版本必须有pack_format但是这个版本不支持使用pack_format其实是不兼容的(ojng员工小时候升三年级发现自己二年级写的暑假作业broken or incompatible)
+                f.write("{\"pack\"}:{\"min_format\":\"[82,0]\",\"max_format\":\"[2147483647,2147483647]\"}")
+            else:
+                f.write("{\"pack\":{\"pack_format\":"+f"{pack_format}"+",\"description\":\"a randompack\"}}")
         print("移动作好的函数文件")
-        mover("start.mcfunction",os.path.join(sppath,"datapack","data","game","functions"))
+        mover("start.mcfunction",os.path.join(sppath,"datapack","data","game",funcfilename))
         print("生成完成")
     else:
         print("检测到你开启了数据包生成模式\n存在数据包,更新数据包的对应文件")
-        mover("start.mcfunction",os.path.join(sppath,"datapack","data","game","functions"))
+        mover("start.mcfunction",os.path.join(sppath,"datapack","data","game",funcfilename))
         print("更新完成")
