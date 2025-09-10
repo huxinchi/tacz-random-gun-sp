@@ -16,6 +16,10 @@ mcver=""
 addconnamds=False
 #重要配置，tacz文件的位置，用来读取枪包
 zipfiledir:str=""
+#快速配置，只需要输入你版本的save文件夹的位置就可以快速配置除addconnamds,pls,attachmentsrools,ammorools,gunsrools的内容
+qsms=False
+qsmspath=""
+
 '''
 说明:
 默认会把当前目录下的save.json作为缓存文件，不存在会重新扫描枪包数据并且缓存进这个文件夹,如果你更新了枪包数据请删除这个文件(可以使用sha-256检测文件变化后自动删除文件)
@@ -61,6 +65,30 @@ zipfiledir:str=""
 
 import zipfile
 import os
+import json
+breakpoint()
+if qsms is True:
+    print("快速配置开始，将覆盖一些配置\n配置枪包文件夹")
+    zipfiledir=os.path.join(qsmspath,"..","tacz")
+    #获取上一层下的tacz文件夹
+    zipfiledir=os.path.normpath(zipfiledir)
+    #防止有..的路径不兼容，直接标准化一下
+    print("配置数据包生成")
+    addconnamds=False
+    spdatapack=True
+    sppath=qsmspath
+    print("获取mc版本")#读json,我不确定能不能行
+    for i in os.listdir(os.path.join(qsmspath,"..")):
+        if i.endswith(".json"):
+            with open(os.path.join(qsmspath,"..",i))as f:
+                try:
+                    vsdatajson=json.load(f)
+                    mcver=vsdatajson["patches"][0]["version"]
+                    #尝试读取这个文件的["patches"][0]["version"]
+                    break
+                except:
+                    pass
+
 try:
     #因为tacz的json文件有注释，只能使用不标准的json模块
     import json5
@@ -158,7 +186,7 @@ def mover(src:str, dst:str)->str:
 
 
 
-import json
+
 import random
 
 random.seed()
@@ -344,11 +372,13 @@ for allnames in os.listdir(epath):
 print("炸了临时目录")
 shutil.rmtree(os.path.join(zipfiledir,"temp"))
 with open("save.json","w",encoding="utf-8")as f:
+    #序列化列表并存储
     f.write(serialize_gun_list(gunids))
 nosave:int=1
 #label save
 if os.path.exists("save.json")and nosave == 0:
     with open("save.json","r",encoding="utf-8")as f:
+        #读取缓存文件
         gunids=deserialize_gun_list(f.read()).copy()
 
 
@@ -396,6 +426,8 @@ if spdatapack is True:
     #提取出每一位版本号
     vers=[int(i) for i in vers]
     #转换为int
+    if len(vers)==2:
+        vers.append(0)
     can_rename_pack_format=False
     if vers[1]>=21:
         funcfilename="function"
@@ -461,6 +493,7 @@ if spdatapack is True:
         can_rename_pack_format=True
     else:
         print("不支持的版本号，这个版本不存在或者是非正常版本(如4.1特殊版本)")
+        quit(0)
 
 
     if not os.path.exists(os.path.join(sppath,"datapack","data","game",funcfilename)):
@@ -470,7 +503,7 @@ if spdatapack is True:
         with open(os.path.join(sppath,"datapack","pack.mcmeta"),"w",encoding="utf-8")as f:
             if can_rename_pack_format is True:
                 #因为ojang的改名，最低只可以到48(1.21)但pack_format必须在min_format和max_format指定的范围内,但又其实因为低版本必须有pack_format但是这个版本不支持使用pack_format其实是不兼容的(ojng员工小时候升三年级发现自己二年级写的暑假作业broken or incompatible)
-                f.write("{\"pack\"}:{\"min_format\":\"[82,0]\",\"max_format\":\"[2147483647,2147483647]\"}")
+                f.write("{\"pack\"}:{\"min_format\":\"[82,0]\",\"max_format\":\"[2147483647,2147483647]\",\"description\":\"a randompack\"}")
             else:
                 f.write("{\"pack\":{\"pack_format\":"+f"{pack_format}"+",\"description\":\"a randompack\"}}")
         print("移动作好的函数文件")
