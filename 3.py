@@ -16,7 +16,7 @@ mcver=""
 addconnamds=False
 #重要配置，tacz文件的位置，用来读取枪包
 zipfiledir:str=""
-#快速配置，只需要输入你版本的save文件夹的位置就可以快速配置除addconnamds,pls,attachmentsrools,ammorools,gunsrools的内容
+#快速配置，只需要输入你版本的具体存档文件夹的位置就可以快速配置除addconnamds,pls,attachmentsrools,ammorools,gunsrools的内容
 qsms=False
 qsmspath=""
 
@@ -69,18 +69,18 @@ import json
 breakpoint()
 if qsms is True:
     print("快速配置开始，将覆盖一些配置\n配置枪包文件夹")
-    zipfiledir=os.path.join(qsmspath,"..","tacz")
+    zipfiledir=os.path.join(qsmspath,"..","..","tacz")
     #获取上一层下的tacz文件夹
     zipfiledir=os.path.normpath(zipfiledir)
     #防止有..的路径不兼容，直接标准化一下
     print("配置数据包生成")
     addconnamds=False
     spdatapack=True
-    sppath=qsmspath
+    sppath=os.join(qsmspath,"datapacks")
     print("获取mc版本")#读json,我不确定能不能行
-    for i in os.listdir(os.path.join(qsmspath,"..")):
+    for i in os.listdir(os.path.join(qsmspath,"..","..")):
         if i.endswith(".json"):
-            with open(os.path.join(qsmspath,"..",i))as f:
+            with open(os.path.join(qsmspath,"..","..",i))as f:
                 try:
                     vsdatajson=json.load(f)
                     mcver=vsdatajson["patches"][0]["version"]
