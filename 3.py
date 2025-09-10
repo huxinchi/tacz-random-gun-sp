@@ -19,7 +19,10 @@ zipfiledir:str=""
 #快速配置，只需要输入你版本的具体存档文件夹的位置就可以快速配置除addconnamds,pls,attachmentsrools,ammorools,gunsrools的内容
 qsms=False
 qsmspath=""
-
+#一键启动模式,使用目标存档打包的zip文件，开始时自动重置地图，自动生成下一局的指令,只需要完成游戏后运行此文件即可开始游玩
+astart=False
+savezippach=""
+#
 '''
 说明:
 默认会把当前目录下的save.json作为缓存文件，不存在会重新扫描枪包数据并且缓存进这个文件夹,如果你更新了枪包数据请删除这个文件(可以使用sha-256检测文件变化后自动删除文件)
@@ -66,7 +69,21 @@ qsmspath=""
 import zipfile
 import os
 import json
-breakpoint()
+import shutil
+if astart is True:
+    print("一键启动模式开启")
+    if os.path.exists(os.path.join(os.path.dirname(savezippach),"random world")):
+        #如果存在就把文件夹删了
+        print("文件夹存在，重新解压")
+        shutil.rmtree(os.path.join(os.path.dirname(savezippach),"random world"))
+    print("创建文件夹")
+    os.makedirs(os.path.join(os.path.dirname(savezippach),"random world"))
+    print("解压")
+    with zipfile.ZipFile(savezippach, 'r') as zip_ref:
+        zip_ref.extractall(os.path.join(os.path.dirname(savezippach),"random world"))
+    #文件解压到目标文件夹
+    qsms=True
+    qsmspath=os.path.join(os.path.dirname(savezippach),"random world")
 if qsms is True:
     print("快速配置开始，将覆盖一些配置\n配置枪包文件夹")
     zipfiledir=os.path.join(qsmspath,"..","..","tacz")
@@ -74,7 +91,6 @@ if qsms is True:
     zipfiledir=os.path.normpath(zipfiledir)
     #防止有..的路径不兼容，直接标准化一下
     print("配置数据包生成")
-    addconnamds=False
     spdatapack=True
     sppath=os.join(qsmspath,"datapacks")
     print("获取mc版本")#读json,我不确定能不能行
@@ -125,7 +141,7 @@ else:
     print("goto测试完成,你支持goto")
 nosave:int=0
 
-import shutil
+
 
 def mover(src:str, dst:str)->str:
     """
@@ -255,7 +271,6 @@ for item in os.listdir(zipfiledir):
     else:
         print(f"居然直接是文件夹?!我直接cv\n发现文件夹形式的包{item}")
         #直接重定向到目标文件夹
-        breakpoint()
         os.makedirs(os.path.join(zipfiledir,"temp",item))
         thispath:str=os.path.join(os.path.join(zipfiledir,"temp"),item)
         shutil.copy2(os.path.join(zipfiledir,item),os.path.join(zipfiledir,"temp"))
