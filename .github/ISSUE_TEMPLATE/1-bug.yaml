@@ -11,7 +11,7 @@ body:
   - type: dropdown
     id: system
     attributes:
-      label: 操作系统
+      label: "操作系统"
       options:
         - Linux
         - Windows
@@ -22,32 +22,29 @@ body:
     id: python-ver
     attributes:
       description: "你的python版本"
-      placeholder: 如3.14,3.13
-      value: 3.14
+      placeholder: "如3.14,3.13"
+      value: "3.14"
     validations:
       required: true
   - type: input
     id: version
     attributes:
       label: 版本信息
-      description: |
-        你使用的版本是什么？
-      placeholder: version
+      description: "你使用的版本是什么？"
+      placeholder: "version"
     validations:
       required: true
   - type: textarea
     id: exist
     attributes:
       label: 现有行为
-      description: |
-        请仔细描述你所遇到的问题
+      description: "请仔细描述你所遇到的问题"
       required: true
   - type: textarea
     id: expect
     attributes:
       label: 预期行为
-      description: |
-        请仔细描述你要得到的结果。
+      description: "请仔细描述你要得到的结果。"
     validations:
       required: true
 
@@ -55,10 +52,9 @@ body:
     id: reproduce
     attributes:
       label: 复现问题
-      description: |
-        这个bug是怎么触发的？请详细告诉我们是怎样出现这个情况的。
-      validations:
-        required: true
+      description: "这个bug是怎么触发的？请详细告诉我们是怎样出现这个情况的。"
+    validations:
+      required: true
   - type: textarea
     id: addmeg
     attributes:
