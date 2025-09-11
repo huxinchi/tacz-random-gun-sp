@@ -1,0 +1,27 @@
+name: 功能请求
+description: 为这个项目推荐一个新想法
+title: "[Feature] "
+labels:
+  - 🪁 enhancement
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        填写此 `issue` 前，请先确认已经开启的 `issue` 没有类似或重复的 `issue`。
+
+  - type: textarea
+    attributes:
+      label: 你想要什么新功能？
+      description: |
+        你想要什么新功能或者什么改变？这会带来什么提升？请清晰而详细地描述你的需求，如果可以的话最好附带截图。
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: know
+    attributes:
+      label: 这个issue是唯一的
+      options:
+        - label: 我已经搜索问题追踪器并且没有发现相同的 issue。
+          required: true
