@@ -1,0 +1,77 @@
+name:"bug反馈"
+description:"反馈bug时使用的模板"
+labels:"bug"
+title:"[bug]"
+body:
+  - type: markdown
+  attributes:
+    value: |
+    bug反馈，填写此 `issue` 前，请先确认已经开启的 `issue` 没有类似或重复的 `issue`。
+    请使用中文进行反馈，因为作者看不懂除了中文以外的文本
+  - type: dropdown
+    id: system
+    attributes:
+      label: 操作系统
+      options:
+        - Linux
+        - Windows
+        - MacOS
+    validations:
+      required: true
+  - type: input
+    id: python-ver
+    attributes:
+      description: "你的python版本"
+      placeholder: 如3.14,3.13
+      value: 3.14
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: 版本信息
+      description: |
+        你使用的版本是什么？
+      placeholder: version
+    validations:
+      required: true
+  - type: textarea
+    id: exist
+    attributes:
+      label: 现有行为
+      description: |
+        请仔细描述你所遇到的问题
+      required: true
+  - type: textarea
+    id: expect
+    attributes:
+      label: 预期行为
+      description: |
+        请仔细描述你要得到的结果。
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 复现问题
+      description: |
+        这个bug是怎么触发的？请详细告诉我们是怎样出现这个情况的。
+      validations:
+        required: true
+  - type: textarea
+    id: addmeg
+    attributes:
+      label: "其他需要补充的内容"
+      description: "其他需要补充的内容"
+      placeholder: "没有可以不填"
+    validations:
+      required: false
+  - type: checkboxes
+    id: know
+    attributes:
+      label: 这个issue是唯一的
+      options:
+        - label: 我已经搜索问题追踪器并且没有发现相同的 issue。
+          required: true
+    
