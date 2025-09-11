@@ -4,10 +4,10 @@ labels:"bug"
 title:"[bug]"
 body:
   - type: markdown
-  attributes:
-    value: |
-    bug反馈，填写此 `issue` 前，请先确认已经开启的 `issue` 没有类似或重复的 `issue`。
-    请使用中文进行反馈，因为作者看不懂除了中文以外的文本
+    attributes:
+      value: |
+        bug反馈，填写此 `issue` 前，请先确认已经开启的 `issue` 没有类似或重复的 `issue`。
+        请使用中文进行反馈，因为作者看不懂除了中文以外的文本
   - type: dropdown
     id: system
     attributes:
