@@ -21,6 +21,7 @@ body:
   - type: input
     id: python-ver
     attributes:
+      label: "你的python版本"
       description: "你的python版本"
       placeholder: "如3.14,3.13"
       value: "3.14"
@@ -37,8 +38,9 @@ body:
   - type: textarea
     id: exist
     attributes:
-      label: 现有行为
+      label: "现有行为"
       description: "请仔细描述你所遇到的问题"
+    validations:
       required: true
   - type: textarea
     id: expect
