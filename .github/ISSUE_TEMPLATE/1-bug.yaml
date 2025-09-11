@@ -1,7 +1,7 @@
-name:"bug反馈"
-description:"反馈bug时使用的模板"
-labels:"bug"
-title:"[bug]"
+name: "bug反馈"
+description: "反馈bug时使用的模板"
+labels: "bug"
+title: "[bug]"
 body:
   - type: markdown
     attributes:
